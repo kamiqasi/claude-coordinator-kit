@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coordinator kit for Claude Code</title>
+<meta name="description" content="Nine Claude Code skills that turn one session into a coordinator: it writes the spec, a worker session builds, the coordinator reviews, and you merge.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg class="defs" aria-hidden="true" focusable="false">
+  <!-- Every drawing here is original line art made for this page. -->
+  <symbol id="carrier" viewBox="0 0 120 80">
+    <g class="far-wing"><path d="M60 41 C 63 27, 70 19, 80 15 C 75 24, 72 32, 71 40"/></g>
+    <path class="body" d="M30 47 C 40 35, 64 31, 84 37 C 93 40, 98 44, 99 48 C 90 55, 72 58, 55 57 C 44 56, 35 53, 30 47 Z"/>
+    <circle class="body" cx="97" cy="40" r="9"/>
+    <path d="M105 37.5 L117 41 L105 44.5"/>
+    <circle class="eye" cx="99.5" cy="38" r="1.7"/>
+    <path class="body" d="M31 47 L11 40 L17 48 L10 56 L33 51"/>
+    <path d="M44 50 C 52 53, 64 53, 74 50" class="detail"/>
+    <path d="M64 57 L62 63 M72 56 L71 62"/>
+    <g class="near-wing"><path class="body" d="M50 41 C 54 20, 70 7, 90 4 C 82 15, 74 28, 72 40 C 64 43, 56 43, 50 41 Z"/>
+      <path class="detail" d="M58 38 C 62 28, 70 19, 80 13 M64 40 C 67 32, 73 25, 81 20"/></g>
+  </symbol>
+  <symbol id="perched" viewBox="0 0 120 80">
+    <path class="body" d="M36 52 C 38 38, 58 30, 76 34 C 88 37, 92 46, 88 54 C 82 62, 62 66, 48 62 C 40 60, 36 57, 36 52 Z"/>
+    <circle class="body" cx="84" cy="30" r="9"/>
+    <path d="M92 27.5 L103 31 L92 34"/>
+    <circle class="eye" cx="86.5" cy="28" r="1.7"/>
+    <path class="body" d="M38 54 L16 62 L24 64 L20 70 L44 60"/>
+    <path class="detail" d="M50 44 C 58 39, 70 39, 78 45 M52 50 C 60 46, 70 46, 76 50"/>
+    <path d="M62 64 L60 74 M72 63 L72 74 M54 74 H 82"/>
+  </symbol>
+  <symbol id="kittiwake" viewBox="0 0 120 90">
+    <ellipse class="body" cx="60" cy="50" rx="17" ry="6"/>
+    <circle class="body" cx="79" cy="46" r="5"/>
+    <path d="M84 45.5 L90 47 L84 48.5"/>
+    <circle class="eye" cx="80.5" cy="45" r="1"/>
+    <path class="body" d="M54 47 C 44 34, 28 26, 6 28 C 24 33, 38 42, 50 52"/>
+    <path class="body" d="M64 47 C 74 30, 92 20, 114 20 C 96 28, 82 40, 70 52"/>
+    <path class="ink" d="M6 28 L16 29.5 L12 32 Z M114 20 L104 22 L107 25 Z"/>
+    <path d="M43 51 L34 49 L36 53 Z"/>
+  </symbol>
+  <symbol id="shearwater" viewBox="0 0 120 90">
+    <path class="body" d="M42 46 C 50 41, 70 40, 84 43 C 88 44, 90 46, 88 48 C 76 51, 54 51, 42 46 Z"/>
+    <path class="ink" d="M58 44 L6 62 L10 64 L62 48 Z"/>
+    <path class="ink" d="M68 43 L114 24 L116 27 L72 47 Z"/>
+    <path d="M88 46 L96 46.5 L94 48.5 L88 48"/>
+    <circle class="eye" cx="85" cy="45.5" r="1"/>
+    <path d="M42 46 L34 44 L35 49 Z"/>
+    <path class="detail" d="M10 76 C 30 70, 50 80, 70 74 C 86 70, 100 78, 114 74"/>
+  </symbol>
+  <symbol id="stonechat" viewBox="0 0 120 90">
+    <path class="body" d="M50 62 C 44 52, 46 38, 58 34 C 70 31, 76 40, 74 52 C 72 62, 64 68, 56 68 C 53 68, 51 66, 50 62 Z"/>
+    <circle class="ink" cx="64" cy="30" r="9"/>
+    <path d="M72 28 L79 30 L72 32"/>
+    <path class="detail" d="M55 41 C 58 39, 62 39, 66 41"/>
+    <path class="body" d="M51 63 L44 78 L50 76 L52 79 L55 67"/>
+    <path d="M60 68 L58 76 M65 67 L65 76"/>
+    <path class="post" d="M50 76 H 76 M62 76 V 88"/>
+  </symbol>
+  <symbol id="wagtail" viewBox="0 0 120 90">
+    <path class="body" d="M42 58 C 48 50, 66 46, 80 48 C 86 49, 88 53, 84 57 C 74 62, 54 63, 42 58 Z"/>
+    <circle class="body" cx="84" cy="46" r="6"/>
+    <path d="M89.5 44.5 L97 46 L89.5 47.5"/>
+    <circle class="eye" cx="85.5" cy="45" r="1"/>
+    <path class="body" d="M44 57 L12 44 L14 48 L42 61"/>
+    <path class="ink" d="M78 42 C 82 40, 88 41, 90 44 L 84 46 Z"/>
+    <path d="M64 61 L62 76 M70 61 L70 76"/>
+    <path class="post" d="M30 76 H 100"/>
+  </symbol>
+  <symbol id="pipit" viewBox="0 0 120 90">
+    <path class="body" d="M38 56 C 44 46, 62 42, 76 45 C 84 47, 86 52, 82 57 C 72 63, 52 64, 38 56 Z"/>
+    <circle class="body" cx="80" cy="42" r="6"/>
+    <path d="M85.5 41 L95 42.3 L85.5 43.6"/>
+    <circle class="eye" cx="81.5" cy="41" r="1"/>
+    <path class="detail" d="M66 50 l2 3 M71 49 l2 3 M73 53 l2 3 M68 55 l2 3 M76 51 l2 3"/>
+    <path class="detail" d="M48 50 C 56 47, 64 47, 70 50"/>
+    <path class="body" d="M40 56 L20 58 L24 61 L42 59"/>
+    <path d="M60 61 L57 76 M67 61 L68 76 M54 76 H 72"/>
+    <path class="post" d="M18 78 C 40 76, 80 79, 104 77"/>
+  </symbol>
+  <symbol id="dovecote" viewBox="0 0 200 230">
+    <path d="M10 92 L100 18 L190 92"/>
+    <path d="M22 92 H 178 V 220 H 22 Z"/>
+    <path d="M100 18 V 6"/>
+    <path class="hole" d="M44 150 a 26 26 0 0 1 52 0 V 172 H 44 Z"/>
+    <path class="hole" d="M104 150 a 26 26 0 0 1 52 0 V 172 H 104 Z"/>
+    <path d="M38 172 H 102 M98 172 H 162"/>
+    <path d="M22 220 H 178"/>
+  </symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to the page</a>
+
+<div class="hero-band">
+<header class="top wrap">
+  <a class="mark" href="#main"><svg class="mark-bird" aria-hidden="true"><use href="#perched"/></svg> coordinator kit</a>
+  <nav aria-label="Sections">
+    <a href="#loop">A real loop</a>
+    <a href="#commands">Commands</a>
+    <a href="#install">Install</a>
+    <a href="https://github.com/kamiqasi/claude-coordinator-kit">GitHub</a>
+  </nav>
+</header>
+
+<main id="main">
+<section class="hero wrap" aria-labelledby="hero-h">
+  <div class="hero-text">
+    <h1 id="hero-h">One Claude builds. Another checks. <em>You merge.</em></h1>
+    <div class="hero-side">
+      <p class="pitch">Two Claude Code sessions pass plain files through a shared folder. Every request flies out with a bird's name on it, and the reply comes back with the same bird. The coordinator writes the spec and checks the work itself. The worker builds. The merge stays yours.</p>
+      <pre class="cmd" aria-label="Install command"><code>claude plugin marketplace add kamiqasi/claude-coordinator-kit</code></pre>
+      <p class="actions"><a class="button" href="#install">Install and set up</a> <a class="link" href="#loop">See a real loop</a></p>
+    </div>
+  </div>
+
+  <div class="scene" role="img" aria-label="The loop, animated: the coordinator types /send; a bird named pipit carries the request through the shared folder to the worker; the worker runs the tests, 25 run, OK; the same bird carries the reply back; the coordinator stamps it accepted; then: you merge.">
+    <svg class="routes routes-wide" viewBox="0 0 1040 450" aria-hidden="true"><path d="M300 60 C 360 -70, 460 -30, 487 235 C 520 -30, 640 -70, 740 60"/><path d="M740 60 C 680 -70, 580 -30, 553 235 C 520 -30, 400 -70, 300 60"/></svg>
+    <svg class="routes routes-tall" viewBox="0 0 340 980" aria-hidden="true"><path d="M270 40 C 420 180, 40 300, 143 493 C 200 600, 360 600, 270 710"/><path d="M270 710 C 380 620, 280 560, 197 493 C 100 300, 400 180, 270 40"/></svg>
+    <div class="win win-coord" aria-hidden="true">
+      <p class="win-bar"><span class="dots"></span>coordinator · claude</p>
+      <p class="ln"><span class="pr">&gt;</span> <span class="typed">/send</span><span class="caret"></span></p>
+      <p class="ln req-out"><span class="tag">pipit</span> request: host-apply names the right sudo account</p>
+      <p class="ln reply-in"><span class="tag">pipit</span> reply: infra-repo#68 (ready)</p>
+      <p class="ln"><span class="stamp">accepted</span></p>
+    </div>
+
+    <div class="cote" aria-hidden="true">
+      <p class="cote-label">shared folder</p>
+      <svg class="cote-art"><use href="#dovecote"/></svg>
+      <span class="hole-label hl-req">requests/</span>
+      <span class="hole-label hl-rep">replies/</span>
+      <span class="slot slot-req">pipit</span>
+      <span class="slot slot-rep">pipit</span>
+    </div>
+
+    <div class="win win-work" aria-hidden="true">
+      <p class="win-bar"><span class="dots"></span>worker · claude</p>
+      <p class="ln w1"><span class="tag">pipit</span> new request</p>
+      <p class="ln w2">$ python3 -m unittest discover -s tools</p>
+      <p class="ln w3"><span class="count"></span><span class="ok">, OK</span></p>
+      <p class="ln w4">pr: infra-repo#68 head e4b787f (ready)</p>
+    </div>
+
+    <div class="bird fly-a" aria-hidden="true"><svg><use href="#carrier"/></svg><span class="carry">pipit · request</span></div>
+    <div class="bird fly-b" aria-hidden="true"><svg><use href="#carrier"/></svg><span class="carry">pipit · reply</span></div>
+    <div class="bird perch perch-work" aria-hidden="true"><svg><use href="#perched"/></svg></div>
+    <div class="bird perch perch-coord" aria-hidden="true"><svg><use href="#perched"/></svg></div>
+
+    <p class="merge-moment" aria-hidden="true"><em>You merge.</em></p>
+  </div>
+</section>
+</main>
+</div>
+
+<section class="wrap loop" id="loop" aria-labelledby="loop-h">
+  <h2 id="loop-h">A real loop</h2>
+  <p class="lede">From one evening this week, shortened. Names and hosts are changed; nothing is added.</p>
+  <ol class="track">
+    <li class="stop">
+      <p class="when">sent</p>
+      <p class="tok"><span class="tag">pipit-host-apply-user-r4d6</span></p>
+      <p>The request: the script names the admin's sudo password, but on the build box the connection is local. Spec: take <code>ansible_user</code>; with no user and a local connection, <code>id -un</code>.</p>
+    </li>
+    <li class="stop">
+      <p class="when">reply · 33 minutes later, queue included</p>
+<pre><code>pr: infra-repo#68 head e4b787f (ready)
+tests: … -&gt; 25 run, OK</code></pre>
+    </li>
+    <li class="stop">
+      <p class="when">review</p>
+      <p class="verdict">Accepted.</p>
+      <p>Two files. The tests pass. Deviation accepted.</p>
+    </li>
+  </ol>
+  <figure class="moment">
+    <svg class="moment-bird" aria-hidden="true"><use href="#pipit"/></svg>
+    <blockquote><p><em>The worker caught the spec's mistake.</em></p></blockquote>
+    <figcaption>Every host inherits <code>ansible_user: ubuntu</code>, so the spec's order would have printed “ubuntu's”: a third wrong answer. A local connection wins, and a test pins the real case.</figcaption>
+  </figure>
+  <aside class="aside">
+    <p><strong>And the kit's own gate.</strong> The worker's first commit of this kit included a <code>.pyc</code> holding host paths. The privacy gate caught it before anything left the machine; the commit was amended and every object scanned again.</p>
+  </aside>
+</section>
+
+<section class="band band-ochre" aria-labelledby="principles-h">
+  <div class="wrap">
+    <h2 id="principles-h">What it holds to</h2>
+    <ul class="principles">
+      <li><span class="chip">your merge</span><p><strong>Every merge is yours.</strong> The worker opens PRs; it never merges them.</p></li>
+      <li><span class="chip">by token</span><p><strong>Matched by token, never guessed.</strong> The reply quotes the request's bird.</p></li>
+      <li><span class="chip">diff first</span><p><strong>The diff before the story.</strong> The review runs the checks itself.</p></li>
+      <li><span class="chip">final review</span><p><strong>Nothing public without your final look.</strong></p></li>
+      <li><span class="chip">plain files</span><p><strong>Plain files, no server.</strong> Any shared folder carries them.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap" id="commands" aria-labelledby="cmd-h">
+  <h2 id="cmd-h">Nine commands</h2>
+  <p class="lede">Grouped by where they sit in the loop: <span class="g g-before">before</span> <span class="g g-wait">while waiting</span> <span class="g g-after">after</span> <span class="g g-between">between sessions</span></p>
+  <ul class="cards">
+    <li><h3><code>/send</code></h3><span class="g g-before">before</span><p>“Go with that.” Writes the request: decisions, steps, a <code>Verify:</code> command and where the worker must stop.</p></li>
+    <li><h3><code>/next</code></h3><span class="g g-before">before</span><p>“Where were we?” What waits on you, what’s in flight, and a weighted ranking of what’s next.</p></li>
+    <li><h3><code>/wip</code></h3><span class="g g-wait">while waiting</span><p>“What’s in flight?” Everything in progress, issue first, each request’s state and age, and all the links in one block.</p></li>
+    <li><h3><code>/while-we-wait</code></h3><span class="g g-wait">while waiting</span><p>“The worker’s busy.” Picks something the coordinator can do alone, and drops it when the reply lands.</p></li>
+    <li><h3><code>/inbox</code></h3><span class="g g-after">after</span><p>“Did it come back?” Reads the reply, reviews it, records a verdict, lists what waits on you.</p></li>
+    <li><h3><code>/review-pr</code></h3><span class="g g-after">after</span><p>“Is PR 42 ready?” Reads the diff before the worker’s story and runs the checks itself.</p></li>
+    <li><h3><code>/merged</code></h3><span class="g g-after">after</span><p>“I merged it.” Checks main holds what was reviewed, checks the rollout, queues the next phase.</p></li>
+    <li><h3><code>/handoff</code></h3><span class="g g-between">between sessions</span><p>“Let’s stop here.” Writes a handoff so the next session starts where this one ended.</p></li>
+    <li><h3><code>/walkthrough</code></h3><span class="g g-between">between sessions</span><p>“Walk me through it.” Plain words, the real trade-off, and commands to paste on the right host.</p></li>
+  </ul>
+</section>
+
+<section class="band band-heron" aria-labelledby="evening-h">
+  <div class="wrap">
+    <h2 id="evening-h">One evening, measured</h2>
+    <div class="numbers">
+      <p><span class="big">8</span> requests sent</p>
+      <p><span class="big">8</span> replies, every one reviewed by the coordinator before the user saw it</p>
+      <p><span class="big">18<small> min</small></span> median, request to reply, queue time included; shortest 4, longest 33</p>
+    </div>
+    <p class="fine">2026-11-19, one person's setup, from the share's upload times.</p>
+    <ul class="flock-of-five" aria-label="The check tokens that evening">
+      <li><svg aria-hidden="true"><use href="#kittiwake"/></svg>kittiwake</li>
+      <li><svg aria-hidden="true"><use href="#shearwater"/></svg>shearwater</li>
+      <li><svg aria-hidden="true"><use href="#stonechat"/></svg>stonechat</li>
+      <li><svg aria-hidden="true"><use href="#wagtail"/></svg>wagtail</li>
+      <li><svg aria-hidden="true"><use href="#pipit"/></svg>pipit</li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap" id="install" aria-labelledby="install-h">
+  <h2 id="install-h">Install</h2>
+  <div class="install">
+    <div>
+      <p>As a Claude Code plugin; the repo is its own marketplace:</p>
+      <pre class="cmd"><code>claude plugin marketplace add kamiqasi/claude-coordinator-kit</code></pre>
+      <pre class="cmd"><code>claude plugin install coordinator-kit@coordinator-kit</code></pre>
+      <p class="note">Or copy <code>skills/*</code> into <code>~/.claude/skills/</code>; the README has both ways.</p>
+    </div>
+    <div>
+      <h3 class="ghead">Setup</h3>
+      <p class="note">The skills hold no site facts. Copy <code>coordinator-setup.example/SKILL.md</code> to <code>~/.claude/skills/coordinator-setup/SKILL.md</code> and fill in your shared folder, lanes, repos and checks.</p>
+      <h3 class="ghead">What it is not</h3>
+      <ul class="nots">
+        <li><strong>Not a framework.</strong> It’s Markdown that Claude Code reads.</li>
+        <li><strong>No server.</strong> Any shared folder carries the files.</li>
+        <li><strong>No agent hosting.</strong> You run both sessions.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="foot wrap">
+  <svg class="foot-bird" aria-hidden="true"><use href="#perched"/></svg>
+  <p><a href="https://github.com/kamiqasi/claude-coordinator-kit">github.com/kamiqasi/claude-coordinator-kit</a> · MIT licence · Instrument Serif under the SIL Open Font License · No scripts, no trackers on this page.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "coordinator-kit",
+  "description": "The coordinator kit: a coordinator/worker loop for Claude Code, as one skills plugin.",
+  "owner": { "name": "kamiqasi" },
+  "plugins": [
+    {
+      "name": "coordinator-kit",
+      "source": "./",
+      "description": "Nine skills for the coordinator side of a coordinator/worker loop: /send, /inbox, /review-pr, /merged, /next, /wip, /while-we-wait, /walkthrough, /handoff.",
+      "version": "1.0.0",
+      "category": "productivity"
+    }
+  ]
+}

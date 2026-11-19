@@ -1,0 +1,338 @@
+/* Coordinator kit site. Static CSS, no scripts. The hook: check tokens are birds, so carrier birds
+   fly the requests and replies between two Claude sessions. Display face: Instrument Serif (SIL OFL
+   1.1, fonts/OFL.txt); body text stays on system fonts. Motion is CSS only (transform, opacity,
+   offset-distance), and every animated element's resting style is the loop's final frame, so
+   prefers-reduced-motion just turns the animations off. */
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("fonts/InstrumentSerif-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("fonts/InstrumentSerif-Italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@property --runs { syntax: "<integer>"; inherits: true; initial-value: 25; }
+
+:root {
+  --bg: #f5efe3;
+  --surface: #fffcf5;
+  --ink: #1c2421;
+  --muted: #4b5650;
+  --line: #d8ccb6;
+  --accent: #1d5b53;
+  --accent-text: #fffcf5;
+  --ochre: #9a4a12;
+  --ochre-bg: #f6e3cf;
+  --green: #2c6636;
+  --green-bg: #e2eedd;
+  --teal-bg: #dcebe8;
+  --code-bg: #f1e9da;
+  --heron: #123f39;
+  --heron-ink: #f5efe3;
+  --heron-muted: #c6d5cd;
+  --heron-ochre: #f0b46a;
+  --band-ochre: #8a400e;
+  --band-ochre-ink: #fff6ea;
+  --win: #fffcf5;
+  --win-ink: #1c2421;
+  --win-muted: #4b5650;
+  --bird-fill: var(--heron);
+  --shadow: 0 2px 0 rgba(0, 0, 0, 0.08), 0 18px 40px -18px rgba(0, 0, 0, 0.45);
+  --display: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #151a1a;
+    --surface: #1d2423;
+    --ink: #ece5d8;
+    --muted: #a8afa8;
+    --line: #364040;
+    --accent: #7fc3b6;
+    --accent-text: #0f1514;
+    --ochre: #e3a56a;
+    --ochre-bg: #33291e;
+    --green: #93cf9c;
+    --green-bg: #1f3123;
+    --teal-bg: #18302d;
+    --code-bg: #232b2a;
+    --heron: #0e2622;
+    --heron-ink: #ece5d8;
+    --heron-muted: #b5c4bc;
+    --heron-ochre: #e8ad66;
+    --band-ochre: #4a2810;
+    --band-ochre-ink: #f6e2c8;
+    --win: #263330;
+    --win-ink: #ece5d8;
+    --win-muted: #a8afa8;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); overflow-x: hidden; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.skip { position: absolute; left: 12px; top: -48px; padding: 8px 12px; background: var(--heron-ochre); color: var(--heron); border-radius: 6px; z-index: 5; }
+.skip:focus { top: 12px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, .button:focus-visible { outline: 3px solid var(--heron-ochre); outline-offset: 3px; border-radius: 4px; }
+code, pre { font-family: var(--mono); font-size: 0.88em; }
+:not(pre) > code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+
+/* Line art: symbols in the page's own SVG, drawn for it. */
+svg use { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.body { fill: var(--bird-fill); }
+.ink, .eye { fill: currentColor; }
+.detail { stroke-width: 1.4; }
+.hole { fill: rgba(0, 0, 0, 0.28); }
+.post { stroke-width: 2; }
+
+/* ---- the hero band ---- */
+.hero-band { background: var(--heron); color: var(--heron-ink); }
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-top: 20px; padding-bottom: 8px; }
+.mark { display: inline-flex; align-items: center; gap: 10px; color: var(--heron-ink); text-decoration: none; font-family: var(--display); font-size: 1.5rem; }
+.mark-bird { width: 44px; height: 30px; color: var(--heron-ochre); }
+.top nav { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 0.95rem; }
+.top nav a { color: var(--heron-muted); text-decoration: none; }
+.top nav a:hover, .top nav a:focus-visible { color: var(--heron-ochre); text-decoration: underline; }
+
+.hero { padding-top: 40px; padding-bottom: 56px; }
+.hero-text { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(3rem, 7.6vw, 6.6rem); line-height: 0.95; letter-spacing: -0.015em; }
+h1 em { color: var(--heron-ochre); white-space: nowrap; }
+.pitch { margin: 0 0 18px; color: var(--heron-muted); font-size: 1.08rem; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin: 14px 0 0; }
+.button { display: inline-block; padding: 11px 20px; border-radius: 999px; background: var(--heron-ochre); color: var(--heron); font-weight: 700; text-decoration: none; }
+.hero .link { color: var(--heron-ink); font-weight: 600; }
+
+.cmd { margin: 0 0 10px; padding: 13px 16px; overflow-x: auto; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; user-select: all; -webkit-user-select: all; }
+.hero .cmd { background: rgba(0, 0, 0, 0.22); color: var(--heron-ink); border-color: rgba(255, 255, 255, 0.14); border-left-color: var(--heron-ochre); }
+.cmd code { white-space: pre; }
+.hero .cmd code { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* ---- the scene: coordinator, shared folder, worker; one loop of 16 s ---- */
+.scene { position: relative; width: 1040px; height: 450px; margin: 44px auto 0; --bird-fill: var(--heron); color: var(--heron-ink); }
+.win { position: absolute; top: 60px; width: 330px; height: 270px; padding: 0 0 12px; border: 1px solid rgba(255, 255, 255, 0.08); background: var(--win); color: var(--win-ink); border-radius: 14px; box-shadow: var(--shadow); font-family: var(--mono); font-size: 0.8rem; overflow: hidden; }
+.win-coord { left: 0; }
+.win-work { left: 710px; }
+.win-bar { margin: 0 0 10px; padding: 9px 14px; background: var(--code-bg); color: var(--win-muted); font-size: 0.74rem; letter-spacing: 0.03em; display: flex; align-items: center; gap: 10px; }
+.dots { width: 34px; height: 8px; background: radial-gradient(circle, var(--line) 3.5px, transparent 4px) 0 0 / 12px 8px repeat-x; }
+.ln { margin: 0 14px 8px; line-height: 1.45; }
+.pr { color: var(--ochre); font-weight: 700; }
+.typed { display: inline-block; vertical-align: bottom; overflow: hidden; white-space: nowrap; width: 5ch; font-weight: 700; color: var(--accent); }
+.caret { display: inline-block; width: 0.55ch; height: 1.1em; vertical-align: -0.2em; margin-left: 2px; background: var(--accent); opacity: 0; }
+.tag { display: inline-block; padding: 0 8px; border-radius: 999px; background: var(--ochre-bg); color: var(--ochre); font-weight: 700; font-size: 0.92em; }
+.req-out { opacity: 0.5; }
+.stamp { display: inline-block; padding: 3px 12px; border: 2px solid var(--green); border-radius: 6px; color: var(--green); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; transform: rotate(-4deg); }
+.count::before { counter-reset: runs var(--runs); content: counter(runs) " run"; }
+.w3 { color: var(--green); font-weight: 700; }
+
+.cote { position: absolute; left: 410px; top: 40px; width: 220px; text-align: center; color: var(--heron-ink); }
+.cote-label { margin: 0 0 4px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--heron-ochre); }
+.cote-art { display: block; width: 220px; height: 253px; --bird-fill: transparent; }
+.cote-art use { stroke-width: 3; }
+.hole-label { position: absolute; top: 232px; transform: translateX(-50%); font-family: var(--mono); font-size: 0.7rem; color: var(--heron-muted); }
+.slot { position: absolute; top: 182px; transform: translateX(-50%); padding: 1px 8px; border-radius: 999px; background: var(--ochre-bg); color: var(--ochre); font-family: var(--mono); font-size: 0.74rem; font-weight: 800; box-shadow: var(--shadow); }
+.hl-req, .slot-req { left: 77px; }
+.hl-rep, .slot-rep { left: 143px; }
+
+.bird { position: absolute; left: 0; top: 0; width: 160px; offset-anchor: 50% 100%; offset-rotate: 0deg; color: var(--heron-ink); pointer-events: none; }
+.bird svg { display: block; width: 160px; height: 108px; overflow: visible; }
+.fly-a, .fly-b { offset-path: path("M300 60 C 360 -70, 460 -30, 487 235 C 520 -30, 640 -70, 740 60"); }
+.fly-b { offset-path: path("M740 60 C 680 -70, 580 -30, 553 235 C 520 -30, 400 -70, 300 60"); }
+.fly-b svg, .perch-work svg { transform: scaleX(-1); }
+.fly-a, .fly-b { opacity: 0; }
+.perch-work { offset-path: path("M740 60 L 741 60"); offset-distance: 0%; opacity: 0; }
+.perch-coord { offset-path: path("M300 60 L 301 60"); offset-distance: 0%; }
+.carry { position: absolute; left: 50%; top: 116px; transform: translateX(-50%); white-space: nowrap; padding: 3px 10px; border-radius: 8px; background: var(--win); color: var(--ochre); font-family: var(--mono); font-size: 0.74rem; font-weight: 700; box-shadow: var(--shadow); }
+.carry::before { content: ""; position: absolute; left: 50%; top: -12px; height: 12px; border-left: 2px solid var(--heron-ink); }
+.routes { position: absolute; left: 0; top: 0; overflow: visible; fill: none; stroke: var(--heron-ink); stroke-width: 1.6; stroke-dasharray: 2 9; stroke-linecap: round; opacity: 0.35; }
+.routes-wide { width: 1040px; height: 450px; }
+.routes-tall { display: none; width: 340px; height: 980px; }
+.near-wing, .far-wing { transform-box: view-box; transform-origin: 60px 41px; }
+
+.merge-moment { position: absolute; left: 50%; top: 350px; transform: translateX(-50%); margin: 0; padding: 4px 26px 10px; border-radius: 999px; background: var(--heron-ochre); color: var(--heron); font-family: var(--display); font-size: 3.4rem; line-height: 1; white-space: nowrap; }
+
+/* The loop. Percentages of 16 s: 0-10 type /send, 10-15 request, 15-35 fly out, 35-60 work,
+   60-80 fly back, 80-88 accepted, 88-100 you merge. */
+.typed { animation: type 16s steps(1, end) infinite; }
+.caret { animation: caret 16s linear infinite; }
+.req-out { animation: req-out 16s infinite; }
+.fly-a { animation: fly-a 16s infinite; }
+.fly-b { animation: fly-b 16s infinite; }
+.perch-work { animation: perch-work 16s infinite; }
+.perch-coord { animation: perch-coord 16s infinite; }
+.slot-req { animation: slot-req 16s infinite; }
+.slot-rep { animation: slot-rep 16s infinite; }
+.w1 { animation: w1 16s infinite; }
+.w2 { animation: w2 16s infinite; }
+.w3 { animation: w3 16s infinite; }
+.count { animation: runs 16s infinite; }
+.ok { animation: ok 16s infinite; }
+.w4 { animation: w4 16s infinite; }
+.reply-in { animation: reply-in 16s infinite; }
+.stamp { animation: stamp 16s infinite; }
+.merge-moment { animation: merge 16s infinite; }
+.near-wing { animation: flap 0.46s ease-in-out infinite alternate; }
+.far-wing { animation: flap-far 0.46s ease-in-out infinite alternate; }
+
+@keyframes type {
+  0%, 2% { width: 0; } 3.4% { width: 1ch; } 4.8% { width: 2ch; } 6.2% { width: 3ch; } 7.6% { width: 4ch; } 9%, 97% { width: 5ch; } 100% { width: 0; }
+}
+@keyframes caret { 0%, 9% { opacity: 1; } 9.5%, 100% { opacity: 0; } }
+@keyframes req-out { 0%, 10% { opacity: 0; transform: translateY(6px); } 11.5%, 14% { opacity: 1; transform: none; } 16%, 97% { opacity: 0.5; transform: none; } 100% { opacity: 0; } }
+@keyframes fly-a {
+  0%, 14.5% { opacity: 0; offset-distance: 0%; }
+  15% { opacity: 1; offset-distance: 0%; animation-timing-function: ease-in-out; }
+  35% { opacity: 1; offset-distance: 100%; }
+  35.5%, 100% { opacity: 0; offset-distance: 100%; }
+}
+@keyframes perch-work { 0%, 35% { opacity: 0; } 35.5%, 59.5% { opacity: 1; } 60%, 100% { opacity: 0; } }
+@keyframes fly-b {
+  0%, 59.5% { opacity: 0; offset-distance: 0%; }
+  60% { opacity: 1; offset-distance: 0%; animation-timing-function: ease-in-out; }
+  80% { opacity: 1; offset-distance: 100%; }
+  80.5%, 100% { opacity: 0; offset-distance: 100%; }
+}
+@keyframes perch-coord { 0%, 14.5% { opacity: 1; } 15%, 80% { opacity: 0; } 80.5%, 100% { opacity: 1; } }
+@keyframes slot-req { 0%, 25% { opacity: 0; transform: translateX(-50%) translateY(-30px); } 27%, 97% { opacity: 1; transform: translateX(-50%); } 100% { opacity: 0; } }
+@keyframes slot-rep { 0%, 70% { opacity: 0; transform: translateX(-50%) translateY(-30px); } 72%, 97% { opacity: 1; transform: translateX(-50%); } 100% { opacity: 0; } }
+@keyframes w1 { 0%, 35.5% { opacity: 0; transform: translateY(6px); } 37%, 97% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes w2 { 0%, 40% { opacity: 0; transform: translateY(6px); } 41.5%, 97% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes w3 { 0%, 43% { opacity: 0; } 44%, 97% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes runs { 0%, 44% { --runs: 0; } 54%, 100% { --runs: 25; } }
+@keyframes ok { 0%, 54% { opacity: 0; } 55%, 97% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes w4 { 0%, 56% { opacity: 0; transform: translateY(6px); } 57.5%, 97% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes reply-in { 0%, 80% { opacity: 0; transform: translateY(6px); } 81.5%, 97% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes stamp { 0%, 84% { opacity: 0; transform: rotate(-4deg) scale(1.6); } 86%, 97% { opacity: 1; transform: rotate(-4deg) scale(1); } 100% { opacity: 0; } }
+@keyframes merge { 0%, 88% { opacity: 0; transform: translateX(-50%) scale(0.7); } 91%, 97% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0; transform: translateX(-50%) scale(1); } }
+@keyframes flap { from { transform: scaleY(1); } to { transform: scaleY(-0.6); } }
+@keyframes flap-far { from { transform: scaleY(1); } to { transform: scaleY(-0.4); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scene *, .scene *::before, .scene *::after { animation: none !important; }
+  /* The still: the loop's final frame (the resting styles above), with the merge shown. */
+}
+
+/* ---- sections ---- */
+section.wrap { padding-top: 64px; padding-bottom: 56px; }
+.band { padding-top: 64px; padding-bottom: 64px; }
+h2 { margin: 0 0 10px; font-family: var(--display); font-weight: 400; font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.02; }
+h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.lede { margin: 0 0 30px; color: var(--muted); max-width: 46em; }
+
+/* A real loop: a timeline, and the catch as the big moment */
+.track { list-style: none; margin: 0; padding: 26px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; position: relative; }
+.track::before { content: ""; position: absolute; left: 6px; right: 6px; top: 8px; height: 3px; background: linear-gradient(to right, var(--ochre), var(--accent), var(--green)); border-radius: 2px; }
+.stop { position: relative; font-size: 0.95rem; }
+.stop::before { content: ""; position: absolute; left: 0; top: -26px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); }
+.stop p { margin: 0 0 8px; }
+.when { color: var(--ochre); font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.stop pre { margin: 0; padding: 10px 12px; background: var(--code-bg); border-radius: 8px; overflow-x: auto; font-size: 0.8rem; }
+.verdict { font-family: var(--display); font-size: 2.4rem; line-height: 1; color: var(--green); }
+.moment { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px 28px; align-items: center; margin: 44px 0 0; padding: 30px 34px; background: var(--ochre-bg); border-radius: 22px; --bird-fill: var(--ochre-bg); color: var(--ochre); }
+.moment-bird { width: 150px; height: 112px; grid-row: span 2; }
+.moment blockquote { margin: 0; }
+.moment blockquote p { margin: 0; font-family: var(--display); font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height: 1.02; color: var(--ink); }
+.moment figcaption { color: var(--ink); max-width: 44em; }
+.aside { margin-top: 18px; padding: 14px 18px; border: 1.5px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 0.93rem; }
+.aside p { margin: 0; }
+
+/* Principles on the ochre band */
+.band-ochre { background: var(--band-ochre); color: var(--band-ochre-ink); }
+.principles { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; }
+.principles li { border-top: 2px solid currentColor; padding-top: 14px; }
+.principles p { margin: 12px 0 0; font-size: 1rem; line-height: 1.45; }
+.principles strong { display: block; font-family: var(--display); font-weight: 400; font-size: 1.75rem; line-height: 1.05; margin-bottom: 6px; }
+.chip { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--band-ochre-ink); color: var(--band-ochre); font-family: var(--mono); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* The nine commands: one clean grid, equal heights */
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 16px; }
+.cards li { display: flex; flex-direction: column; padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.cards h3 code { color: var(--accent); font-size: 1.15rem; background: none; padding: 0; }
+.cards p { margin: 10px 0 0; color: var(--muted); font-size: 0.94rem; }
+.g { display: inline-block; width: fit-content; padding: 1px 9px; border-radius: 999px; font-family: var(--mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.lede .g { margin: 0 4px 4px 0; }
+.g-before { background: var(--teal-bg); color: var(--accent); }
+.g-wait { background: var(--ochre-bg); color: var(--ochre); }
+.g-after { background: var(--green-bg); color: var(--green); }
+.g-between { background: var(--code-bg); color: var(--muted); }
+
+/* One evening, measured: the big numbers and the five birds */
+.band-heron { background: var(--heron); color: var(--heron-ink); --bird-fill: var(--heron); }
+.band-heron h2 { color: var(--heron-ink); }
+.numbers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 20px; }
+.numbers p { margin: 0; color: var(--heron-muted); font-size: 1rem; }
+.big { display: block; font-family: var(--display); font-size: clamp(5rem, 9vw, 7.4rem); line-height: 0.9; color: var(--heron-ochre); }
+.big small { font-size: 0.42em; }
+.fine { margin: 18px 0 0; color: var(--heron-muted); font-size: 0.85rem; }
+.flock-of-five { list-style: none; margin: 36px 0 0; padding: 22px 0 0; border-top: 1px solid rgba(255, 255, 255, 0.18); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; text-align: center; font-family: var(--display); font-size: 1.45rem; color: var(--heron-ink); }
+.flock-of-five svg { display: block; width: 100%; max-width: 150px; height: 104px; margin: 0 auto 4px; color: var(--heron-ink); }
+
+/* Install */
+.install { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; }
+.install p { margin: 0 0 10px; }
+.note { color: var(--muted); font-size: 0.93rem; }
+.ghead { margin: 4px 0 8px; color: var(--ochre); font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.nots { margin: 0 0 6px; padding-left: 1.1em; color: var(--muted); font-size: 0.93rem; }
+.nots strong { color: var(--ink); }
+
+/* Footer */
+.foot { display: flex; align-items: center; gap: 16px; padding-top: 28px; padding-bottom: 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; --bird-fill: var(--bg); }
+.foot-bird { flex: none; width: 64px; height: 44px; color: var(--accent); }
+.foot p { margin: 0; }
+.foot a { overflow-wrap: anywhere; }
+
+/* ---- narrower: the scene stacks (coordinator, folder, worker) ---- */
+@media (max-width: 1099px) {
+  .scene { width: 340px; height: 980px; }
+  .win { width: 340px; height: 220px; }
+  .win-coord { left: 0; top: 40px; }
+  .win-work { left: 0; top: 710px; }
+  .cote { left: 80px; top: 330px; width: 180px; }
+  .cote-art { width: 180px; height: 207px; }
+  .hole-label { top: 192px; font-size: 0.58rem; }
+  .slot { top: 150px; }
+  .hl-req, .slot-req { left: 63px; }
+  .hl-rep, .slot-rep { left: 117px; }
+  .bird, .bird svg { width: 130px; }
+  .bird svg { height: 88px; }
+  .carry { top: 96px; }
+  .routes-wide { display: none; }
+  .routes-tall { display: block; }
+  .fly-a { offset-path: path("M270 40 C 420 180, 40 300, 143 493 C 200 600, 360 600, 270 710"); }
+  .fly-b { offset-path: path("M270 710 C 380 620, 280 560, 197 493 C 100 300, 400 180, 270 40"); }
+  .perch-work { offset-path: path("M270 710 L 271 710"); }
+  .perch-coord { offset-path: path("M270 40 L 271 40"); }
+  .merge-moment { top: 590px; font-size: 2.8rem; }
+}
+@media (max-width: 900px) {
+  .hero-text { grid-template-columns: 1fr; gap: 22px; }
+  .principles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .numbers { grid-template-columns: 1fr; gap: 18px; }
+  .flock-of-five { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .install { grid-template-columns: 1fr; gap: 12px; }
+}
+@media (max-width: 640px) {
+  .track { grid-template-columns: 1fr; padding: 0 0 0 30px; gap: 22px; }
+  .track::before { left: 7px; right: auto; top: 6px; bottom: 6px; width: 3px; height: auto; background: linear-gradient(to bottom, var(--ochre), var(--accent), var(--green)); }
+  .stop::before { left: -30px; top: 2px; }
+  .moment { grid-template-columns: 1fr; padding: 22px; }
+  .moment-bird { grid-row: auto; width: 120px; height: 90px; }
+  .principles, .cards { grid-template-columns: 1fr; }
+  .cards { grid-auto-rows: auto; }
+  .flock-of-five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cmd code { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .foot { align-items: flex-start; }
+}
