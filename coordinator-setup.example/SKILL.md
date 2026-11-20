@@ -12,7 +12,9 @@ Copy this folder to `~/.claude/skills/coordinator-setup/` (all your projects) or
 name, and fill in the block below. Delete the lines you don't use; a skill skips a step whose key is missing.
 
 The skills refer to a key as `setup.<key>`, e.g. `setup.lanes.folders.requests`. `{lane}` in a value is
-replaced by the session's lane name.
+replaced by the session's lane name. When one template can't fit every lane (say one lane uses flat folders),
+any value under `lanes:` may instead be a map by lane name, e.g. `requests: {main: requests/, second: requests/2/}`;
+a skill then takes this session's lane's value.
 
 ```yaml
 transport:                     # how the coordinator and the worker pass files. Any shared folder works.
@@ -45,6 +47,14 @@ lanes:                         # a lane is one coordinator/worker pair; run seve
     command: ""                # the command your start prompt arms to watch the replies folder, if any
   start_command: ""            # how the user starts the next coordinator session for this lane
   worker_start: ""             # how the user starts or nudges this lane's worker
+  worker: {main: "the worker"} # who runs this lane's requests, in a few words; each request says it up front
+  ignore: []                   # requests in this lane's folder that aren't the coordinator's: filename globs and
+                               # front-matter markers, e.g. ["nightly-*", "front matter: contract: batch_v1"].
+                               # Left out of "open requests" everywhere.
+
+labels:
+  approver_step: "Approver step:"   # how a request marks a step only the approver may run; use the words
+                                    # your worker's rules look for
 
 protocol: ""                   # path to your rules: what the worker may do without asking (its standing
                                # go-ahead), and what always needs you. Requests point the worker at it.
@@ -73,6 +83,13 @@ project_checks:                # your own checks; each skill runs the list for i
   render: ""                   # how to screenshot UI changes, e.g. "headless Chromium at 1280 and 375 px"
   rollout: []                  # after a merge, per repo, e.g. ["app: the deploy job for the merge commit passed"]
   next: []                     # extra state for /next, e.g. ["unhealthy pods", "open alerts"]
+
+notices:                       # optional: short notes between coordinators of different lanes. Information only:
+                               # never work, never approval. Leave folder empty if you don't use them.
+  folder: ""                   # e.g. notices/
+  post: ""                     # how to name one you post, e.g. "notices/{UTC}-{lane}-{slug}.md"
+  read: ""                     # which ones are for you, e.g. "notices/*-other-lane-*"
+  retired: ""                  # where you move your own answered notices, e.g. notices/retired/
 
 priority:                      # /next and /while-we-wait rank with these lenses (1-5 each, higher is better)
   weights: {impact: 3, urgency: 2, lightness: 1.5, drive: 1.5, safety: 1}

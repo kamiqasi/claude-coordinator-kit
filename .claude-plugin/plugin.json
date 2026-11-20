@@ -1,7 +1,7 @@
 {
   "name": "coordinator-kit",
   "displayName": "Coordinator kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Skills for running Claude Code as a coordinator that specs work, hands it to a worker session, reviews what comes back, and leaves the merge to you.",
   "author": { "name": "kamiqasi", "url": "https://github.com/kamiqasi" },
   "license": "MIT",

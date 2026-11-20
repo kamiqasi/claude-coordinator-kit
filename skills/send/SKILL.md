@@ -17,7 +17,7 @@ kit's README, "Setup"). Work out this session's lane; the request goes **only** 
    - If something is still genuinely the user's call (cost, security posture, deleting data), ask that one
      question first instead of sending.
 2. **Write the request,** following `setup.protocol` if it sets a format:
-   - a title line;
+   - a title line, then **`Runs on:`** with `setup.lanes.worker` for this lane, so the right worker picks it up;
    - **`Check token: \`<word>-<slug>-<4 chars>\``**, unique across every lane (search the requests
      folders first). The worker quotes it in its reply;
    - context, with issue and PR links;
@@ -28,9 +28,10 @@ kit's README, "Setup"). Work out this session's lane; the request goes **only** 
      clean checkout. You run it yourself at review; the worker's own run is a claim, not the check. Leave
      it out for docs-only or read-only work, and say why;
    - **hard rules:** repo scope, no merge, no force-push, list deviations rather than stopping, no secrets;
-   - **`Approver step:`** on every step the worker may not do alone under `setup.protocol` (privileged
-     commands, merges, deletes, new dependencies, other repos), so it knows where to stop before it starts.
-     Don't add "confirm first" to steps it may do (commit, push, PR, reply);
+   - **the approver's label** (`setup.labels.approver_step`, word for word) on every step the worker may not
+     do alone under `setup.protocol` (privileged commands, merges, deletes, new dependencies, other repos), so
+     it knows where to stop before it starts. Each such step says which password it will ask for and why, or
+     that it asks for none. Don't add "confirm first" to steps it may do (commit, push, PR, reply);
    - stop conditions and a rollback;
    - the exact reply filename (`setup.lanes.names_of.reply`) and what the reply must contain.
 3. **Upload** it to `setup.lanes.folders.requests`, named as `setup.lanes.names_of.request`, with

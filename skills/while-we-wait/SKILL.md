@@ -13,7 +13,8 @@ kit's README, "Setup"). Work out this session's lane.
 
 ## 1. What we're waiting on
 - List this lane's requests with no reply yet: compare `setup.lanes.folders.requests` with
-  `setup.lanes.folders.replies`, and search the replies for each check token.
+  `setup.lanes.folders.replies`, and search the replies for each check token. Leave out requests matching
+  `setup.lanes.ignore`.
 - Note how long each has been out and the expected wait: about 20 minutes for a small change, about 45 for
   a feature with tests, unless the request or past replies say otherwise.
 - If nothing is out, say so in one line and run the `next` skill's steps (`../next/SKILL.md`) instead.

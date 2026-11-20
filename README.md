@@ -73,6 +73,8 @@ It covers:
 - **lanes:** one coordinator/worker pair each, with their folders and file names. Run two to keep each
   session's context small;
 - **protocol:** your rules for what the worker may do without asking;
+- **labels** and **notices** (optional): the words that mark a step only you may run, and short notes
+  between coordinators of different lanes;
 - **tracker** (optional), **repos**, **GitHub limits**;
 - **project checks:** your own commands, run at review, after a merge, and by `/next`;
 - **priority weights** for `/next`.

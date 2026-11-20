@@ -16,11 +16,17 @@ Explain `$ARGUMENTS`, or the last step discussed, so the user can act on it with
 1. **The point first:** one or two sentences, in plain words, on what it does and why it matters now. Skip
    settled background.
 2. **The trade-offs,** only if there's a real choice: the options, what each costs, and your recommendation.
-3. **The steps.** Number them, and give each one:
-   - **where it runs:** which of `setup.people.hosts`, or which web UI, and as which user;
+3. **The steps, one at a time.** With several steps, give the first, then wait for its result before the
+   next. Number them, and give each one:
+   - **where it runs:** which of `setup.people.hosts`, or which web UI, and as which user, at every step,
+     even when it's the same as the last;
+   - **which password it will ask for, and why,** said before the command (whose sudo password, on which
+     host), or that it asks for none;
    - **the exact command,** in its own block, ready to paste. No placeholders to work out; if a value is
      unknown, give the command that finds it;
    - **what success looks like,** and what to paste back if it doesn't.
+
+   After a step that leaves things in a safe state, offer to stop there.
 4. **Safety:**
    - call out anything destructive or hard to reverse, and put the check before it (plan before apply,
      stopped before destroy);

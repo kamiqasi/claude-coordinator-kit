@@ -15,7 +15,7 @@ kit's README, "Setup"). Work out this session's lane.
 
 ## 1. Gather
 - **Requests out:** this lane's requests in `setup.lanes.folders.requests` from the last 7 days
-  (`setup.transport.list`). A request is open when no reply in `setup.lanes.folders.replies` quotes its
+  (`setup.transport.list`), leaving out any that match `setup.lanes.ignore`. A request is open when no reply in `setup.lanes.folders.replies` quotes its
   check token: search the replies, one read each (`setup.transport.read`). Read the top of each open
   request for its token, its issue and one line of what it does.
   - **State,** read from the files, never guessed:

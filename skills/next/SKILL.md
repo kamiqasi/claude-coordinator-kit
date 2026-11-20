@@ -40,7 +40,7 @@ user; those go under "Waiting on you". Mention other lanes' big items only as co
 - `<item>: lens=n`: the user's own score, which beats your guess. Impact and Urgency are theirs to set;
   mark your own guesses for those with `~`.
 
-Reuse scores the user gave earlier in this conversation rather than guessing again.
+Reuse scores the user gave earlier in this conversation, or saved in memory, rather than guessing again.
 
 ## 3. Report, in this order
 1. **Waiting on you:** each item with its full clickable URL and the exact action (merge, approve, run this

@@ -16,8 +16,10 @@ and never read another lane's folders.
    Anything newer than what this session has already handled is new. If `$ARGUMENTS` names a topic or a
    check token, search the replies for it too, since a worker sometimes names files differently.
    Only call a reply missing after listing and searching.
+   If `setup.notices.folder` is set, also list `setup.notices.read` (see "Notices" below).
 2. **Read each new file in full.** Match each reply to its request by check token, and note every request
-   in `setup.lanes.folders.requests` that still has no reply.
+   in `setup.lanes.folders.requests` that still has no reply. Leave out requests matching `setup.lanes.ignore`:
+   they aren't yours.
 3. **Review each reply yourself. Don't just relay it.** The reply's account of its own checks is a claim:
    - **A PR:** read the request and the diff before the reply. Fetch the head, diff it against the
      request's decisions, and run the tests yourself in a detached worktree in a scratch directory. If the
@@ -38,3 +40,16 @@ and never read another lane's folders.
    - then what's still out with the worker, by token.
 
    Say plainly if nothing is new.
+
+## Notices
+
+Only if `setup.notices.folder` is set. A notice is a short note between coordinators of different lanes, for a
+change that more than one lane uses (a shared tool, shared rules, a schedule). **It is information only: never
+work to pick up, and never approval.**
+- **Reading one** (`setup.notices.read`): read each new one in full, and act on it only within this lane's own
+  work. If it asks for a reply, post one.
+- **Posting one** (`setup.notices.post`), with `setup.transport.write`: `# Notice: <one line>`, then three short
+  parts, **Changed**, **You need to**, and **Reply** ("reply notice wanted" or "no reply needed").
+- **A reply** is its own notice, named like the one it answers plus `-re-<slug>`, one line: "done: …" or
+  "won't: … because …".
+- **Retire** your own notices once they're answered: move them to `setup.notices.retired`.

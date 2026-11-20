@@ -11,8 +11,9 @@ disable-model-invocation: true
 else `~/.claude/skills/coordinator-setup/SKILL.md`. If neither exists, stop and say how to make one (the
 kit's README, "Setup"). Work out this session's lane.
 
-1. **Re-check before writing:** the inbox listing (`../inbox/SKILL.md`, step 1), open PRs, and the state of
-   each in-flight token. The handoff must describe now, not an hour ago.
+1. **Re-check before writing:** the inbox listing (`../inbox/SKILL.md`, step 1, including notices if
+   `setup.notices.folder` is set), open PRs, and the state of each in-flight token. The handoff must describe
+   now, not an hour ago. Name any notice still waiting for your reply.
 2. **Write the handoff:** under about 80 lines, addressed to the next session of the same role and lane:
    - **done,** with links;
    - **in flight:** each item's exact next step and its check token;
