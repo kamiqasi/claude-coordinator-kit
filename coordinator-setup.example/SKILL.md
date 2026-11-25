@@ -91,6 +91,15 @@ notices:                       # optional: short notes between coordinators of d
   read: ""                     # which ones are for you, e.g. "notices/*-other-lane-*"
   retired: ""                  # where you move your own answered notices, e.g. notices/retired/
 
+desk:                          # optional: a page outside the terminal where the user answers your questions
+                               # (/ask). Leave every key empty for "no desk"; /ask then asks in chat.
+  post: ""                     # a command that posts one message file, with {kind}, {file} and {lane}, e.g.
+                               # "desk-cli post --lane {lane} {kind} --file {file}"; prints one line
+  watch: ""                    # a command for a Monitor: one line per new reply or new-work item, e.g.
+                               # "desk-cli watch --lane {lane} --state ~/.cache/desk-{lane}.json"
+  replies: ""                  # the folder the answers land in, under the transport, e.g. desk/replies/
+  format: ""                   # where the message format (kinds, fields, limits) is written down
+
 priority:                      # /next and /while-we-wait rank with these lenses (1-5 each, higher is better)
   weights: {impact: 3, urgency: 2, lightness: 1.5, drive: 1.5, safety: 1}
 ```

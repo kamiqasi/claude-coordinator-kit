@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coordinator kit for Claude Code</title>
-<meta name="description" content="Nine Claude Code skills that turn one session into a coordinator: it writes the spec, a worker session builds, the coordinator reviews, and you merge.">
+<meta name="description" content="Ten Claude Code skills that turn one session into a coordinator: it writes the spec, a worker session builds, the coordinator reviews, and you merge.">
 <meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -199,7 +199,7 @@ tests: … -&gt; 25 run, OK</code></pre>
 </section>
 
 <section class="wrap" id="commands" aria-labelledby="cmd-h">
-  <h2 id="cmd-h">Nine commands</h2>
+  <h2 id="cmd-h">Ten commands</h2>
   <p class="lede">Grouped by where they sit in the loop: <span class="g g-before">before</span> <span class="g g-wait">while waiting</span> <span class="g g-after">after</span> <span class="g g-between">between sessions</span></p>
   <ul class="cards">
     <li><h3><code>/send</code></h3><span class="g g-before">before</span><p>“Go with that.” Writes the request: decisions, steps, a <code>Verify:</code> command and where the worker must stop.</p></li>
@@ -211,6 +211,7 @@ tests: … -&gt; 25 run, OK</code></pre>
     <li><h3><code>/merged</code></h3><span class="g g-after">after</span><p>“I merged it.” Checks main holds what was reviewed, checks the rollout, queues the next phase.</p></li>
     <li><h3><code>/handoff</code></h3><span class="g g-between">between sessions</span><p>“Let’s stop here.” Writes a handoff so the next session starts where this one ended.</p></li>
     <li><h3><code>/walkthrough</code></h3><span class="g g-between">between sessions</span><p>“Walk me through it.” Plain words, the real trade-off, and commands to paste on the right host.</p></li>
+    <li><h3><code>/ask</code></h3><span class="g g-between">between sessions</span><p>“Ask me on the desk.” Posts one question, step or merge to a page you answer away from the terminal, then acts on your reply.</p></li>
   </ul>
 </section>
 

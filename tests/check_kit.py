@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILLS = ROOT / "skills"
 SETUP = ROOT / "coordinator-setup.example" / "SKILL.md"
 SETUP_PATHS = (".claude/skills/coordinator-setup/SKILL.md", "~/.claude/skills/coordinator-setup/SKILL.md")
-EXPECTED = ("send", "inbox", "review-pr", "merged", "next", "wip", "while-we-wait", "walkthrough", "handoff")
+EXPECTED = ("send", "inbox", "review-pr", "merged", "next", "wip", "while-we-wait", "walkthrough", "handoff", "ask")
 KEY_USE = re.compile(r"`setup\.([a-z_]+(?:\.[a-z_]+)*)`")
 
 checks = 0
@@ -211,7 +211,7 @@ def check_commands() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     rows = re.findall(r"^\| `/([a-z-]+)` \|", readme, re.M)
     check(sorted(rows) == sorted(EXPECTED), f"README.md: the commands table lists {rows}")
-    words = {9: "nine"}
+    words = {9: "nine", 10: "ten"}
     count = words.get(len(EXPECTED), str(len(EXPECTED)))
     check(f"{count} skills" in readme, f"README.md: doesn't say {count} skills")
     site = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")

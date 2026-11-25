@@ -6,8 +6,8 @@
     {
       "name": "coordinator-kit",
       "source": "./",
-      "description": "Nine skills for the coordinator side of a coordinator/worker loop: /send, /inbox, /review-pr, /merged, /next, /wip, /while-we-wait, /walkthrough, /handoff.",
-      "version": "1.1.0",
+      "description": "Ten skills for the coordinator side of a coordinator/worker loop: /send, /inbox, /review-pr, /merged, /next, /wip, /while-we-wait, /walkthrough, /handoff, /ask.",
+      "version": "1.2.0",
       "category": "productivity"
     }
   ]

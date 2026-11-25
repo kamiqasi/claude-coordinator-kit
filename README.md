@@ -4,7 +4,7 @@ Site: https://kamiqasi.github.io/claude-coordinator-kit/
 
 Two Claude Code sessions, two jobs: a **coordinator** that plans, writes the spec and reviews, and a **worker** that builds.
 They pass plain files through any shared folder; you approve and merge.
-This kit is the coordinator's side of that loop, as nine skills and one setup file.
+This kit is the coordinator's side of that loop, as ten skills and one setup file.
 
 ## The loop
 
@@ -34,6 +34,7 @@ The coordinator re-runs the checks itself instead of trusting the worker's accou
 | `/while-we-wait` | the worker is busy: it picks something the coordinator can do alone, and drops it when the reply lands |
 | `/walkthrough` | you need to run a step yourself: plain words, trade-offs, copy-paste commands |
 | `/handoff` | the session is ending: it writes a handoff for the next coordinator session |
+| `/ask` | you need the user's answer and they're away from the terminal: it posts the question, step or merge to a desk page, watches for the answer, and acts on it |
 
 Installed as a plugin, the commands are namespaced: `/coordinator-kit:send`, `/coordinator-kit:inbox`, and so on.
 
@@ -75,6 +76,7 @@ It covers:
 - **protocol:** your rules for what the worker may do without asking;
 - **labels** and **notices** (optional): the words that mark a step only you may run, and short notes
   between coordinators of different lanes;
+- **desk** (optional): a page outside the terminal where you answer the coordinator's questions, for `/ask`;
 - **tracker** (optional), **repos**, **GitHub limits**;
 - **project checks:** your own commands, run at review, after a merge, and by `/next`;
 - **priority weights** for `/next`.
